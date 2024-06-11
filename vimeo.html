@@ -1,0 +1,156 @@
+
+<!-- saved from url=(0029)https://oidq.dev/p/vimeo.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Test</title>
+  
+  <style>
+    header > h1 {
+        font-family: "Arial";
+        font-size: 3rem;
+        margin: 0.8rem;
+    }
+    .wrapper {
+        display: flex;
+        margin: 20px;
+        gap: 20px;
+    }
+    #left {
+        flex-grow: 2;
+    }
+    #right {
+        flex-grow: 2;
+    }
+    .embed-container {
+        position: relative;
+        aspect-ratio: 16/9;
+        height: 100%;
+    }
+    .embed-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .selectors {
+        display: flex;
+        justify-content: center;
+        gap: 0.6rem;
+    }
+    .description {
+        margin: 0 auto;
+        text-align: center;
+        max-width: 40rem;
+        font-size: 1.2rem;
+    }
+    button {
+        border: solid 3px grey;
+        border-radius: 8px;
+        background-color: white;
+        font-weight: 600;
+        font-size: 1.8rem;
+        padding: 0.3rem 0.8rem;
+    }
+  </style>
+  <script src="./vimeo-olive_files/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <h1>SVĚTOVÝ SILNIČNÍ KONGRES 2023</h1>
+    </header>
+    <main>
+        <div class="wrapper">
+            <div class="embed-container" id="left" data-vimeo-initialized="true"><iframe src="./vimeo-olive_files/embed.html" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" data-ready="true"></iframe></div>
+            <div class="embed-container" id="right" data-vimeo-initialized="true"><iframe src="./vimeo-olive_files/embed(1).html" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" data-ready="true"></iframe></div>
+        </div>
+        <div class="selectors">
+            <button id="btn-eq" type="button">1:1</button>
+            <button id="btn-left" type="button">2:1</button>
+            <button id="btn-right" type="button">1:2</button>
+        </div>
+        <div class="description">
+            <p>
+                Kongres, kterého se zúčastní 3000 až 5000 delegátů převážně ze zahraničí,
+                představí nejnovější trendy a technologie v sektoru silniční dopravy.
+                Sejdou se zde ministři dopravy z téměř 130 členských zemí asociace,
+                aby se podělili o své postřehy a diskutovali o výzvách, které přináší
+                modernizace jejich národní silniční infrastruktury.
+                Akce účastníkům poskytne celosvětový přehled současných postupů
+                a budoucích trendů v oblasti silniční infrastruktury a silniční mobility
+                a zahrne klíčové příležitosti pro navazování mezinárodních kontaktů a společenské aktivity.
+            </p>
+        </div>
+    </main>
+
+  <script src="./vimeo-olive_files/player.js"></script>
+  <script>
+    var options01 = {
+      //url: 261794608,
+      //url: 282718398,
+      //url: 902887094,
+      url: "https://vimeo.com/event/4379805",
+      autopause: false,
+    };
+    var options02 = {
+      //url: 902887094,
+      // url: 282718398,
+      url: "https://vimeo.com/event/4379810",
+      controls: false,
+      muted: true,
+      autopause: false,
+    };
+
+    $('#btn-eq').click(() => {
+         $("#left").css("flex-grow", "2");
+         $("#right").css("flex-grow", "2");
+    })
+
+    $('#btn-left').click(() => {
+         $("#left").css("flex-grow", "2");
+         $("#right").css("flex-grow", "1");
+    })
+
+    $('#btn-right').click(() => {
+         $("#left").css("flex-grow", "1");
+         $("#right").css("flex-grow", "2");
+    })
+
+    var lPlayer = new Vimeo.Player('left', options01);
+    var rPlayer = new Vimeo.Player('right', options02);
+
+    
+    lPlayer.setVolume(0);
+    rPlayer.setVolume(0);
+
+    lPlayer.on('loaded', function() {
+        lPlayer.play();
+        lPlayer.pause();
+    })
+
+    rPlayer.on('loaded', function() {
+        rPlayer.play();
+        rPlayer.pause();
+    })
+
+    lPlayer.on('play', function(event) {
+        lPlayer.getCurrentTime().then(function(seconds) {
+            if (Math.abs(event.seconds - seconds) > 2) {
+                rPlayer.setCurrentTime(seconds);
+            }
+            rPlayer.play();
+        });
+    });
+    lPlayer.on('pause', function() {
+        rPlayer.pause();
+        lPlayer.getCurrentTime().then(function(seconds) {
+            rPlayer.setCurrentTime(seconds);
+        });
+    })
+    lPlayer.on('seeked', function(events) {
+        rPlayer.setCurrentTime(events.seconds);
+    })
+  </script>
+
+
+
+</body></html>
